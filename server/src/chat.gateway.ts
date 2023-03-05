@@ -34,7 +34,7 @@ export class ChatGateway
   @SubscribeMessage('newUser')
   handleEvent(client: Socket, data: { id: number; name: string }) {
     users.push({ socketId: client.id, ...data });
-    client.emit('newUsersResponse', users);
+    this.wss.emit('newUsersResponse', users);
   }
 
   @SubscribeMessage('joinRoom')
@@ -46,20 +46,16 @@ export class ChatGateway
   @SubscribeMessage('chatToServer')
   handleMessage(
     client: Socket,
-    message: { sender: string; room: string; message: string },
+    message: { message: string },
   ) {
-    this.wss.to(message.room).emit('chatToClient', message);
+    // this.wss.to(message.room).emit('chatToClient', message);
+    this.wss.emit('chatToClient', message);
   }
+  
+  handleConnection(client: Socket, ...args: any[]) {}
 
   handleDisconnect(client: Socket) {
-    console.log(`Disconnected: ${client.id}`);
     users = users.filter((user) => user.socketId !== client.id);
-    client.emit('newUsersResponse', users);
-    //Выполняем действия
-  }
-
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log(`Connected ${client.id}`);
-    client.emit('newUsersResponse', users);
+    this.wss.emit('newUsersResponse', users);
   }
 }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import ChatWidget from './components/ChatWidget';
 import AuthPage from './pages/AuthPage';
 import ChatPage from './pages/ChatPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   // const joinRoom = () => {

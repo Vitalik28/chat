@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import UserItem from '../User/UserItem';
+import { ListGroup } from 'react-bootstrap';
+import UserItem from './Users/UserItem';
 
 interface IUser {
   id: number;
@@ -10,11 +11,13 @@ interface ChatListProps {
 }
 const ChatList: FC<ChatListProps> = ({ users }) => {
   return (
-    <div>
+    <ListGroup as="ul">
       {users.map((user) => (
-        <UserItem key={user.id} name={user.name} />
+        <ListGroup.Item>
+          <UserItem key={user.id} name={user.name} />
+        </ListGroup.Item>
       ))}
-    </div>
+    </ListGroup>
   );
 };
 
