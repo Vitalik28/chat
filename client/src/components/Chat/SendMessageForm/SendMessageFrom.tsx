@@ -12,9 +12,38 @@ const SendMessageFrom: FC<SendMessageFormProps> = ({ socket }) => {
     setMessage(e.target.value);
   };
 
-  const sendMessage = () => {
-    if (message) {
-      socket.emit('chatToServer', message);
+  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!message) return;
+    const user = JSON.parse(sessionStorage.getItem('user') || '[]');
+    const messageData = {
+      ...user,
+      message,
+      time:
+        new Date(Date.now()).getHours() +
+        ':' +
+        new Date(Date.now()).getMinutes(),
+    };
+
+    await socket.emit('chatToServer', messageData);
+    // setMessageList((list) => [...list, messageData]);
+    setMessage('');
+  };
+
+  const sendKeyMessage = async (e: React.KeyboardEvent) => {
+    if (!message.trim()) return;
+    if (e.keyCode === 13) {
+      const user = JSON.parse(sessionStorage.getItem('user') || '[]');
+      const messageData = {
+        ...user,
+        message,
+        time:
+          new Date(Date.now()).getHours() +
+          ':' +
+          new Date(Date.now()).getMinutes(),
+      };
+
+      await socket.emit('chatToServer', messageData);
+      // setMessageList((list) => [...list, messageData]);
       setMessage('');
     }
   };
@@ -27,6 +56,7 @@ const SendMessageFrom: FC<SendMessageFormProps> = ({ socket }) => {
           aria-label="With textarea"
           value={message}
           onChange={changeHandler}
+          onKeyDown={sendKeyMessage}
         />
         <Button onClick={sendMessage}>Отправить</Button>
       </InputGroup>

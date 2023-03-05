@@ -7,7 +7,7 @@ interface UserItemProps {
 }
 const UserItem: FC<UserItemProps> = ({ name }) => {
   return (
-    <Row>
+    <Row className="cursor-pointer">
       <Col sx lg={3}>
         <Icon.PersonCircle size={30} />
       </Col>

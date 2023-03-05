@@ -46,12 +46,14 @@ export class ChatGateway
   @SubscribeMessage('chatToServer')
   handleMessage(
     client: Socket,
-    message: { message: string },
+    message: { user: string; time: string; message: string },
   ) {
+    console.log(message);
+
     // this.wss.to(message.room).emit('chatToClient', message);
     this.wss.emit('chatToClient', message);
   }
-  
+
   handleConnection(client: Socket, ...args: any[]) {}
 
   handleDisconnect(client: Socket) {
